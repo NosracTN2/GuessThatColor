@@ -1,39 +1,64 @@
-async function loadGame() {
-  // Check the URL for a color parameter
-  const params = new URLSearchParams(window.location.search);
-  const colorName = params.get('color');
-  const app = document.getElementById('app');
+let gameData = null; // This will hold your JSON data
 
-  // If no color is selected, show a welcome message
-  if (!colorName || !['red', 'blue', 'yellow', 'green'].includes(colorName)) {
-    app.innerHTML = `
-      <div class="container">
-        <h2>Welcome to Guess That Color!</h2>
-        <p>Pick a color from the top to get your first hint.</p>
-      </div>`;
-    return;
-  }
-
+// 1. Fetch the data right when the page loads
+async function initGame() {
   try {
-    // Fetch the data from your GitHub JSON file
     const response = await fetch('data.json');
-    const data = await response.json();
-    const colorData = data.colors[colorName];
+    gameData = await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
 
-    // Check the time
-    const currentHour = new Date().getHours();
-    const isRevealed = currentHour >= data.revealHour;
+// 2. Function to show the home screen
+function showHome() {
+  document.body.className = 'home';
+  document.getElementById('home-view').style.display = 'flex';
+  document.getElementById('color-view').style.display = 'none';
+}
 
-    // Build the page content
-    app.innerHTML = `
-      <div class="container">
-        <h1>That's ${colorName}?</h1>
-        <div class="hint-box">
-          <strong>Hint:</strong> ${colorData.hint}
-        </div>
-        ${isRevealed
-          ? `<div class="answer">Answer: ${colorData.answer}</div>`
-          : `<div class="waiting">Check back after ${formatHour(data.revealHour)} for the answer!</div>`
+// 3. Function to show a specific color screen
+function showColor(colorName) {
+  // If data didn't load, stop here
+  if (!gameData) return; 
+
+  const colorData = gameData.colors[colorName];
+  
+  // Change background color via CSS themes
+  document.body.className = `color-page theme-${colorName}`;
+  
+  // Swap the visible screens
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('color-view').style.display = 'block';
+
+  // Capitalize title
+  const capitalizedColor = colorName.charAt(0).toUpperCase() + colorName.slice(1);
+  document.getElementById('title-color').textContent = capitalizedColor;
+
+  // Set the hint
+  document.getElementById('hint-text').textContent = colorData.hint;
+
+  // Check the time and show either the answer or the waiting message
+  const currentHour = new Date().getHours();
+  const isRevealed = currentHour >= gameData.revealHour;
+  const answerBox = document.getElementById('answer-box');
+
+  if (isRevealed) {
+    answerBox.innerHTML = `<div class="bubble-box answer">Answer: ${colorData.answer}</div>`;
+  } else {
+    answerBox.innerHTML = `<div class="waiting">Check back after ${formatHour(gameData.revealHour)} for the answer!</div>`;
+  }
+}
+
+// Format 24h to 12h time (e.g., 17 -> 5:00 PM)
+function formatHour(hour) {
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const formattedHour = hour % 12 || 12;
+  return `${formattedHour}:00 ${ampm}`;
+}
+
+// Start the setup when the script loads
+initGame();
         }
       </div>
     `;
