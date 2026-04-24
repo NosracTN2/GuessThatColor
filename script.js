@@ -7,7 +7,7 @@ function showHome() {
 
 async function showColor(colorName) {
   try {
-    const response = await fetch('data.json');
+    const response = await fetch('https://gist.githubusercontent.com/NosracTN2/19ff61b00cb92bfd3ee9d588ffe46fd6/raw/data.json');
     const gameData = await response.json();
 
     document.body.className = `color-page theme-${colorName}`;
