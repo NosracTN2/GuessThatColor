@@ -1,0 +1,21 @@
+{
+  "revealHour": 16,
+  "colors": {
+    "red": {
+      "hint": "Often found on a ripe strawberry or a stop sign.",
+      "answer": "Cherry Red!"
+    },
+    "blue": {
+      "hint": "Look up on a clear day or down at the ocean.",
+      "answer": "Sky Blue!"
+    },
+    "yellow": {
+      "hint": "Bright and cheerful, like a sunflower.",
+      "answer": "Lemon Yellow!"
+    },
+    "green": {
+      "hint": "The shade of spring grass and lucky clovers.",
+      "answer": "Emerald Green!"
+    }
+  }
+}
