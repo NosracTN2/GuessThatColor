@@ -1,4 +1,4 @@
-// 1. Function to show the home screen
+// Function to show the home screen
 function showHome() {
   document.body.className = 'home';
   document.getElementById('home-view').style.display = 'flex';
@@ -6,14 +6,14 @@ function showHome() {
   document.getElementById('dynamic-content').innerHTML = '';
 }
 
-// 2. Main function to show the color puzzle
+// Main function to show the color puzzle
 async function showColor(colorName) {
   try {
-    // THE CACHE BUSTER: This tells GitHub to ignore its memory and give us the freshest data right now!
+    // The Cache Buster: Ensures you always get the freshest data
     const cacheBuster = new Date().getTime();
     const gistUrl = `https://gist.githubusercontent.com/NosracTN2/19ff61b00cb92bfd3ee9d588ffe46fd6/raw/data.json?t=${cacheBuster}`;
     
-    // Fetch the data using the fresh URL
+    // Fetch the data
     const response = await fetch(gistUrl); 
     const gameData = await response.json();
 
@@ -55,7 +55,14 @@ async function showColor(colorName) {
     // Proceed normally with today's specific color data
     const colorData = todaysPuzzles[colorName];
     const currentHour = now.getHours(); 
-    const isRevealed = currentHour >= gameData.revealHour;
+    
+    // THE FIX: Check if we are viewing yesterday's puzzle or today's puzzle
+    let isRevealed = false;
+    if (currentHour < gameData.newPuzzleHour) {
+      isRevealed = true; // It's yesterday's puzzle, so the answer is definitely out!
+    } else {
+      isRevealed = currentHour >= gameData.revealHour; // It's today's puzzle, wait for 5 PM
+    }
     
     let answerHTML = '';
     if (isRevealed) {
@@ -81,7 +88,7 @@ async function showColor(colorName) {
   }
 }
 
-// 3. Helper function to format the time neatly (This might have gotten deleted earlier!)
+// Helper function to format the time neatly
 function formatHour(hour) {
   const ampm = hour >= 12 ? 'PM' : 'AM';
   const formattedHour = hour % 12 || 12;
