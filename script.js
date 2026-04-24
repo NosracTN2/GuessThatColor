@@ -1,4 +1,4 @@
-async function showColor(colorName) {
+async function showColor(colorName) { // Lowercase 'async'
   try {
     // 1. Fetch your data
     const response = await fetch('https://gist.githubusercontent.com/NosracTN2/19ff61b00cb92bfd3ee9d588ffe46fd6/raw/data.json'); 
@@ -21,14 +21,14 @@ async function showColor(colorName) {
     // 4. Find today's data inside the calendar
     const todaysPuzzles = gameData.calendar[todayKey];
 
-    // 4. Change background color
+    // 5. Change background color
     document.body.className = `color-page theme-${colorName}`;
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('color-view').style.display = 'block';
 
     const capitalizedColor = colorName.charAt(0).toUpperCase() + colorName.slice(1);
 
-    // 5. Safety Check: Did you forget to write a puzzle for today?
+    // 6. Safety Check: Did you forget to write a puzzle for today?
     if (!todaysPuzzles) {
       document.getElementById('dynamic-content').innerHTML = `
         <h1 class="logo logo-large">
@@ -41,9 +41,11 @@ async function showColor(colorName) {
       return; // Stop the script here so it doesn't crash
     }
 
-    // 6. Proceed normally with today's specific color data
+    // 7. Proceed normally with today's specific color data
     const colorData = todaysPuzzles[colorName];
-    const currentHour = today.getHours();
+    
+    // FIXED: Changed today.getHours() to now.getHours() so it doesn't crash!
+    const currentHour = now.getHours(); 
     const isRevealed = currentHour >= gameData.revealHour;
     
     let answerHTML = '';
