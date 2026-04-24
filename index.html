@@ -9,31 +9,42 @@
   <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="home">
 
-  <main id="home-view" class="home-grid">
-    <a href="?color=red" class="color-box theme-red">
+  <main id="home-view" class="home-stack">
+    <div class="color-box theme-red" onclick="showColor('red')">
       <div class="logo"><span class="thats">That's</span> <span class="color-name">Red</span>?</div>
-    </a>
-    <a href="?color=blue" class="color-box theme-blue">
+    </div>
+    <div class="color-box theme-blue" onclick="showColor('blue')">
       <div class="logo"><span class="thats">That's</span> <span class="color-name">Blue</span>?</div>
-    </a>
-    <a href="?color=yellow" class="color-box theme-yellow">
+    </div>
+    <div class="color-box theme-yellow" onclick="showColor('yellow')">
       <div class="logo"><span class="thats">That's</span> <span class="color-name">Yellow</span>?</div>
-    </a>
-    <a href="?color=green" class="color-box theme-green">
+    </div>
+    <div class="color-box theme-green" onclick="showColor('green')">
       <div class="logo"><span class="thats">That's</span> <span class="color-name">Green</span>?</div>
-    </a>
+    </div>
   </main>
 
   <main id="color-view" style="display: none;">
-    <a href="index.html" class="home-btn">🏠 Home</a>
+    <button onclick="showHome()" class="home-btn">🏠 Home</button>
     
     <div class="content-wrapper">
       <h1 class="logo logo-large">
         <span class="thats">That's</span> <span class="color-name" id="title-color">Color</span>?
       </h1>
       
+      <div class="hint-box bubble-box">
+        <strong>Hint:</strong> <span id="hint-text">Loading hint...</span>
+      </div>
+      
+      <div id="answer-box"></div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
       <div class="hint-box bubble-box">
         <strong>Hint:</strong> <span id="hint-text">Loading hint...</span>
       </div>
