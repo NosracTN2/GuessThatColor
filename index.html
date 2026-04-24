@@ -4,18 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guess That Color</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <nav>
-    <a href="?color=red" class="btn red">Red</a>
-    <a href="?color=blue" class="btn blue">Blue</a>
-    <a href="?color=yellow" class="btn yellow">Yellow</a>
-    <a href="?color=green" class="btn green">Green</a>
-  </nav>
 
-  <main id="app">
-    </main>
+  <main id="home-view" class="home-grid">
+    <a href="?color=red" class="color-box theme-red">
+      <div class="logo"><span class="thats">That's</span> <span class="color-name">Red</span>?</div>
+    </a>
+    <a href="?color=blue" class="color-box theme-blue">
+      <div class="logo"><span class="thats">That's</span> <span class="color-name">Blue</span>?</div>
+    </a>
+    <a href="?color=yellow" class="color-box theme-yellow">
+      <div class="logo"><span class="thats">That's</span> <span class="color-name">Yellow</span>?</div>
+    </a>
+    <a href="?color=green" class="color-box theme-green">
+      <div class="logo"><span class="thats">That's</span> <span class="color-name">Green</span>?</div>
+    </a>
+  </main>
+
+  <main id="color-view" style="display: none;">
+    <a href="index.html" class="home-btn">🏠 Home</a>
+    
+    <div class="content-wrapper">
+      <h1 class="logo logo-large">
+        <span class="thats">That's</span> <span class="color-name" id="title-color">Color</span>?
+      </h1>
+      
+      <div class="hint-box bubble-box">
+        <strong>Hint:</strong> <span id="hint-text">Loading hint...</span>
+      </div>
+      
+      <div id="answer-box"></div>
+    </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
