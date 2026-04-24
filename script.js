@@ -1,34 +1,45 @@
-async function showColor(colorName) { // Lowercase 'async'
+// 1. Function to show the home screen
+function showHome() {
+  document.body.className = 'home';
+  document.getElementById('home-view').style.display = 'flex';
+  document.getElementById('color-view').style.display = 'none';
+  document.getElementById('dynamic-content').innerHTML = '';
+}
+
+// 2. Main function to show the color puzzle
+async function showColor(colorName) {
   try {
-    // 1. Fetch your data
-    const response = await fetch('https://gist.githubusercontent.com/NosracTN2/19ff61b00cb92bfd3ee9d588ffe46fd6/raw/data.json'); 
+    // THE CACHE BUSTER: This tells GitHub to ignore its memory and give us the freshest data right now!
+    const cacheBuster = new Date().getTime();
+    const gistUrl = `https://gist.githubusercontent.com/NosracTN2/19ff61b00cb92bfd3ee9d588ffe46fd6/raw/data.json?t=${cacheBuster}`;
+    
+    // Fetch the data using the fresh URL
+    const response = await fetch(gistUrl); 
     const gameData = await response.json();
 
-    // 2. Get today's date, but adjust for the new puzzle hour!
+    // Time Travel Logic for the 8:00 AM reset
     const now = new Date();
-    const gameDate = new Date(now); // Make a copy of the current time
+    const gameDate = new Date(now);
 
-    // If the current hour is BEFORE your new puzzle hour, tell the game it's still yesterday
     if (now.getHours() < gameData.newPuzzleHour) {
       gameDate.setDate(gameDate.getDate() - 1);
     }
 
-    // 3. Format the date (MM-DD) based on our adjusted gameDate
     const month = String(gameDate.getMonth() + 1).padStart(2, '0');
     const day = String(gameDate.getDate()).padStart(2, '0');
     const todayKey = `${month}-${day}`;
 
-    // 4. Find today's data inside the calendar
+    // Find today's data inside the calendar
     const todaysPuzzles = gameData.calendar[todayKey];
 
-    // 5. Change background color
+    // Change background color and swap screens
     document.body.className = `color-page theme-${colorName}`;
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('color-view').style.display = 'block';
 
     const capitalizedColor = colorName.charAt(0).toUpperCase() + colorName.slice(1);
 
-    // 6. Safety Check: Did you forget to write a puzzle for today?
+    // Safety Check: If there's no puzzle for today
     if (!todaysPuzzles) {
       document.getElementById('dynamic-content').innerHTML = `
         <h1 class="logo logo-large">
@@ -38,13 +49,11 @@ async function showColor(colorName) { // Lowercase 'async'
           <strong>Oops!</strong> The creator is taking a day off. Check back tomorrow!
         </div>
       `;
-      return; // Stop the script here so it doesn't crash
+      return; // Stop here so it doesn't crash
     }
 
-    // 7. Proceed normally with today's specific color data
+    // Proceed normally with today's specific color data
     const colorData = todaysPuzzles[colorName];
-    
-    // FIXED: Changed today.getHours() to now.getHours() so it doesn't crash!
     const currentHour = now.getHours(); 
     const isRevealed = currentHour >= gameData.revealHour;
     
@@ -67,7 +76,14 @@ async function showColor(colorName) { // Lowercase 'async'
     `;
 
   } catch (error) {
-    alert("Oops! The game data couldn't load.");
+    alert("Oops! The game data couldn't load. Double-check your data.json file on GitHub.");
     console.error("Error details:", error);
   }
+}
+
+// 3. Helper function to format the time neatly (This might have gotten deleted earlier!)
+function formatHour(hour) {
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const formattedHour = hour % 12 || 12;
+  return `${formattedHour}:00 ${ampm}`;
 }
